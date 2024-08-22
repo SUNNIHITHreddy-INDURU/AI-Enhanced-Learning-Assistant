@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discussion</title>
+<style>
+/* CSS styles here */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.discussion-container {
+  width: 100%;
+  height: calc(100vh - 20px); /* Fill entire screen except for 20px border */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.discussion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+}
+
+.discussion-header h1 {
+  margin: 0;
+}
+
+.close-btn {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.message-container {
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(100% - 240px); /* Adjust height for message container */
+}
+
+.message {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.message.sent {
+  background-color: #DCF8C6;
+}
+
+.answer {
+  margin-top: 20px; /* Add margin between user message and answer */
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #C2E0FF; /* Change background color for answer */
+}
+
+#commentForm {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 40px); /* Adjust width */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+#commentInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+#sendButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#sendButton:hover {
+  background-color: #45a049;
+}
+</style>
+</head>
+<body>
+
+
+<div class="discussion-container">
+  <div class="discussion-header">
+    <h1>Discussion</h1>
+    <p style="margin: 1rem 0;">"Engage in peer-to-peer discussions and share Knowledge."</p>
+    <span class="close-btn">×</span>
+  </div>
+  <div class="message-container" id="messageContainer">
+    <!-- Message history will be displayed here -->
+  </div>
+  <div id="commentForm">
+    <input type="text" id="commentInput" placeholder="Type your message...">
+    <button id="sendButton">Send</button>
+  </div>
+</div>
+
+<script>
+// JavaScript code here
+// Store previous messages
+const messages = [];
+
+// Function to add a message to the message container
+function addMessage(message, isSent = false) {
+    const messageContainer = document.getElementById('messageContainer');
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message');
+    if (isSent) {
+        messageElement.classList.add('sent');
+    }
+    messageElement.textContent = message;
+    messageContainer.appendChild(messageElement);
+    // Scroll to bottom
+    messageContainer.scrollTop = messageContainer.scrollHeight;
+}
+
+// Event listener for send button
+document.getElementById('sendButton').addEventListener('click', function() {
+    const messageInput = document.getElementById('commentInput');
+    const message = messageInput.value.trim();
+    if (message) {
+        addMessage(message, true); // Add sent message to message container
+        messages.push(message); // Store sent message in history
+        // Clear input
+        messageInput.value = '';
+        // Implement logic to process the message (e.g., send to OpenAI API)
+        // This part is not included in this example
+    }
+});
+
+// Display message history when the page loads
+window.onload = function() {
+    const messageContainer = document.getElementById('messageContainer');
+    messages.forEach(function(message) {
+        addMessage(message, true); // Add sent message to message container
+    });
+};
+</script>
+
+</body>
+</html>

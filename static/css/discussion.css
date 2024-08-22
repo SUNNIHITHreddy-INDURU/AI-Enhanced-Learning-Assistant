@@ -1,0 +1,86 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: flex-end; /* Align content to the bottom */
+}
+
+.discussion-container {
+  max-width: 600px;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border: 10px solid transparent; /* Added border with transparent color */
+  position: relative; /* Position container relative for absolute positioning */
+}
+
+.discussion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.discussion-header h1 {
+  margin: 0;
+}
+
+.close-btn {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.message-container {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.message {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.message.sent {
+  background-color: #DCF8C6;
+  text-align: right;
+}
+
+#commentForm {
+  position: absolute; /* Position the form absolutely */
+  bottom: 0; /* Place the form at the bottom */
+  left: 50%; /* Move the form to the center horizontally */
+  transform: translateX(-50%); /* Adjust centering */
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+#commentInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px; /* Adjust border radius */
+  border: 1px solid #ccc;
+  margin-bottom: 10px; /* Add margin to separate from messages */
+}
+
+#sendButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+#sendButton:hover {
+  background-color: #45a049;
+}

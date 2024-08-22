@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expert Support</title>
+<style>
+/* CSS styles here */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f2f2f2;
+  margin: 0;
+  padding: 0;
+}
+
+.discussion-container {
+  width: 100%;
+  height: calc(100vh - 20px); /* Fill entire screen except for 20px border */
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.discussion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+}
+
+.discussion-header h1 {
+  margin: 0;
+}
+
+.close-btn {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.message-container {
+  padding: 20px;
+  overflow-y: auto;
+  height: calc(100% - 240px); /* Adjust height for message container */
+}
+
+.message {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.question {
+  background-color: #7ab577;
+}
+
+.answer {
+  background-color: #8273b7; /* Change background color for answer */
+}
+
+#commentForm {
+  position: absolute;
+  bottom: 0;
+  width: calc(100% - 40px); /* Adjust width */
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+}
+
+#commentInput {
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+}
+
+#sendButton {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#sendButton:hover {
+  background-color: #45a049;
+}
+</style>
+</head>
+<body>
+  <div class="discussion-container">
+    <div class="discussion-header">
+      <h1>Expert Support</h1>
+      <p>Empower your journey with expert guidance through ChatGPT's personalized support.</p>
+      <div class="close-btn" id="closeButton">X</div>
+    </div>
+    <div class="message-container" id="messageContainer">
+      <!-- Messages will be displayed here -->
+    </div>
+    <form id="commentForm">
+      <input type="text" id="commentInput" placeholder="Type your message...">
+      <button type="submit" id="sendButton">Send</button>
+    </form>
+  </div>
+  
+  <script>
+ document.addEventListener('DOMContentLoaded', function() {
+    const messageContainer = document.getElementById('messageContainer');
+    const commentForm = document.getElementById('commentForm');
+    const commentInput = document.getElementById('commentInput');
+    const closeButton = document.getElementById('closeButton');
+
+    let lastMessageType = 'question'; // Track the last message type sent (question or answer)
+
+    commentForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const messageText = commentInput.value.trim();
+        if (messageText !== '') {
+            sendMessage(messageText, 'question'); // Send the message as a question
+            commentInput.value = '';
+            // Call function to fetch answer from ChatGPT API immediately
+            fetchAnswerFromChatGPT(messageText);
+        }
+    });
+
+    closeButton.addEventListener('click', function() {
+        window.location.href = 'generate_qna.html';
+    });
+
+    // Function to send message and display it in the message container
+    function sendMessage(messageText, messageType) {
+        const message = document.createElement('div');
+        message.classList.add('message', messageType === 'question' ? 'question' : 'answer');
+        message.textContent = messageText;
+        messageContainer.appendChild(message);
+        // Scroll to the bottom to show the latest message
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+    }
+
+    // Function to fetch answer from ChatGPT API
+    function fetchAnswerFromChatGPT(question) {
+        // Replace 'YOUR_API_KEY' with your actual API key
+        const apiKey = '';
+        // Construct the request body
+        const requestBody = JSON.stringify({
+            model: 'davinci',
+            question: question,
+            examples_context: 'To answer your question',
+            max_tokens: 150
+        });
+        // Send POST request to ChatGPT API
+        fetch('https://api.openai.com/v1/answers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: requestBody
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.answers && data.answers.length > 0) {
+                    // If an answer is received, display it
+                    const answer = data.answers[0].text;
+                    sendMessage(answer, 'answer'); // Send the answer as a message
+                } else {
+                    // If no answer is received, display an error message
+                    sendMessage('Sorry, I could not find an answer to your question.', 'answer');
+                }
+            })
+            .catch(error => {
+                // If an error occurs, display an error message
+                console.error('Error:', error);
+                sendMessage('Sorry, an error occurred while processing your request.', 'answer');
+            });
+    }
+    // Add sample question and answer
+    const sampleQuestion = "What is encapsulation in Java?";
+    const sampleAnswer = "Encapsulation in Java is a process of binding data and methods into a single unit, also known as a class. In encapsulation, the data is hidden from other classes and can only be accessed by the methods of the class in which it is declared. This is achieved by using access modifiers like private, protected, and public.";
+    // Display the sample question and answer
+    sendMessage(sampleQuestion, 'question');
+    sendMessage(sampleAnswer, 'answer');
+});
+</script>
+  
+</body>
+</html>
